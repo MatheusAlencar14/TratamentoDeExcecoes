@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -5,20 +7,21 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
+        File file = new File("C:\\temp\\in.txt");
+        Scanner sc = null;
 
         try {
-            String [] vet = sc.nextLine().split(" ");
-            int pos = sc.nextInt();
-            System.out.println(vet[pos]);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Posição inválida!");
-        } catch (InputMismatchException e) {
-            System.out.println("Erro de entrada!");
+            sc = new Scanner(file);
+            while (sc.hasNextLine()) {
+                System.out.println(sc.nextLine());
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Erro ao abrir o arquivo: " + e.getMessage());
+        } finally {
+            if (sc != null) {
+                sc.close();
+            }
+            System.out.println("Executanto bloco Finally!");
         }
-
-        System.out.println("Fim do programa");
-
-        sc.close();
     }
 }
