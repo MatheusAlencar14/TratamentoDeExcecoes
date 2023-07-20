@@ -29,7 +29,7 @@ public class ProgramAccount {
             System.out.print("Digite o valor para saque: ");
             double amount = sc.nextDouble();
             account.withdraw(amount);
-            System.out.println("Novo saldo: " + account.getBalance());
+            System.out.println("Novo saldo: " + String.format("%.2f", account.getBalance()));
         } catch (DomainException e) {
             System.out.println("Erro de saque: " + e.getMessage());
         } catch (RuntimeException e) {
