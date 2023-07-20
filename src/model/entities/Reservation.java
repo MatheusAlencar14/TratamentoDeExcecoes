@@ -1,5 +1,7 @@
 package model.entities;
 
+import model.exceptions.DomainException;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -15,7 +17,11 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Integer roomNumber, Date checkIn, Date checkOut) {
+    public Reservation(Integer roomNumber, Date checkIn, Date checkOut) throws DomainException {
+        if (!checkOut.after(checkIn)) {
+            throw new DomainException("A data de check-out deve ser " +
+                    "posterior à data de check-in.");
+        }
         this.roomNumber = roomNumber;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
@@ -33,7 +39,6 @@ public class Reservation {
         return checkIn;
     }
 
-
     public Date getCheckOut() {
         return checkOut;
     }
@@ -43,19 +48,18 @@ public class Reservation {
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
-    public String updateDates(Date checkIn, Date checkOut) {
+    public void updateDates(Date checkIn, Date checkOut) throws DomainException {
         Date now = new Date();
         if (checkIn.before(now) || checkOut.before(now)) {
-            return "As datas para atualização da reserva " +
-                    "precisam ser datas futuras.";
+            throw new DomainException("As datas para atualização da reserva " +
+                    "precisam ser datas futuras.");
         }
         if (!checkOut.after(checkIn)) {
-            return "A data de check-out deve ser " +
-                    "posterior à data de check-in.";
+            throw new DomainException("A data de check-out deve ser " +
+                    "posterior à data de check-in.");
         }
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        return null;
     }
 
     @Override
@@ -70,5 +74,4 @@ public class Reservation {
                 + duration()
                 + " noites.";
     }
-
 }
